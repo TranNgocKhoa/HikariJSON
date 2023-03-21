@@ -1,26 +1,22 @@
 package com.zaxxer.hikari.json;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.zaxxer.hikari.json.JsonFactory.Option;
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.zaxxer.hikari.json.JsonFactory.Option;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestParser1
 {
    private ByteArrayInputStream bais;
 
-   @Before
+   @BeforeEach
    public void before() throws IOException
    {
       File file = new File("src/test/resources/menu.json");
@@ -33,12 +29,12 @@ public class TestParser1
    {
       ObjectMapper objectMapper = JsonFactory.create();
       MenuBar menuBar = objectMapper.readValue(bais, MenuBar.class);
-      Assert.assertEquals(menuBar.menu.id, "file");
-      Assert.assertEquals(menuBar.menu.value, "File");
-      Assert.assertNotNull(menuBar.menu.popup);
-      Assert.assertNotNull(menuBar.menu.popup.menuitem);
-      Assert.assertTrue(menuBar.menu.popup.menuitem instanceof HashSet);
-      Assert.assertSame(3, menuBar.menu.popup.menuitem.size());
+      assertEquals("file", menuBar.menu.id);
+      assertEquals("File", menuBar.menu.value);
+      assertNotNull(menuBar.menu.popup);
+      assertNotNull(menuBar.menu.popup.menuitem);
+      assertTrue(menuBar.menu.popup.menuitem instanceof HashSet);
+      assertSame(3, menuBar.menu.popup.menuitem.size());
    }
 
    @Test
@@ -47,12 +43,12 @@ public class TestParser1
       ObjectMapper objectMapper = JsonFactory.option(Option.FIELD_ACCESS, Option.VALUES_ASCII).option(Option.COLLECTION_CLASS, LinkedList.class).create();
 
       MenuBar2 menuBar = objectMapper.readValue(bais, MenuBar2.class);
-      Assert.assertEquals(menuBar.menu.id, "file");
-      Assert.assertEquals(menuBar.menu.value, "File");
-      Assert.assertNotNull(menuBar.menu.popup);
-      Assert.assertNotNull(menuBar.menu.popup.menuitem);
-      Assert.assertTrue(menuBar.menu.popup.menuitem instanceof LinkedList);
-      Assert.assertSame(3, menuBar.menu.popup.menuitem.size());
+      assertEquals("file", menuBar.menu.id);
+      assertEquals("File", menuBar.menu.value);
+      assertNotNull(menuBar.menu.popup);
+      assertNotNull(menuBar.menu.popup.menuitem);
+      assertTrue(menuBar.menu.popup.menuitem instanceof LinkedList);
+      assertSame(3, menuBar.menu.popup.menuitem.size());
    }
 
    @Test
@@ -61,12 +57,12 @@ public class TestParser1
       ObjectMapper objectMapper = JsonFactory.option(Option.FIELD_ACCESS, Option.VALUES_ASCII).create();
 
       MenuBar2 menuBar = objectMapper.readValue(bais, MenuBar2.class);
-      Assert.assertEquals(menuBar.menu.id, "file");
-      Assert.assertEquals(menuBar.menu.value, "File");
-      Assert.assertNotNull(menuBar.menu.popup);
-      Assert.assertNotNull(menuBar.menu.popup.menuitem);
-      Assert.assertTrue(menuBar.menu.popup.menuitem instanceof ArrayList);
-      Assert.assertSame(3, menuBar.menu.popup.menuitem.size());
+      assertEquals("file", menuBar.menu.id);
+      assertEquals("File", menuBar.menu.value);
+      assertNotNull(menuBar.menu.popup);
+      assertNotNull(menuBar.menu.popup.menuitem);
+      assertTrue(menuBar.menu.popup.menuitem instanceof ArrayList);
+      assertSame(3, menuBar.menu.popup.menuitem.size());
    }
 
    @Test
@@ -77,7 +73,7 @@ public class TestParser1
       File file = new File("src/test/resources/AllTypes.json");
       try (InputStream is = new FileInputStream(file)) {
          AllType allType = objectMapper.readValue(is, AllType.class);
-         Assert.assertTrue(allType.myDouble == 1.2);
+         assertEquals(1.2, allType.myDouble);
       }
    }
 
@@ -86,7 +82,7 @@ public class TestParser1
       for (int i = 0; i < 10_000_000; i++) {
          ObjectMapper objectMapper = JsonFactory.create();
          MenuBar2 menuBar = objectMapper.readValue(bais, MenuBar2.class);
-         Assert.assertEquals(menuBar.menu.id, "file");
+         assertEquals("file", menuBar.menu.id);
          bais.reset();
       }
    }
